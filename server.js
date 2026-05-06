@@ -491,7 +491,9 @@ const server = http.createServer(async (req, res) => {
 });
 
 initDb();
-server.listen(port, '127.0.0.1', () => {
+const host = process.env.HOST || '0.0.0.0';
+
+server.listen(port, host, () => {
   console.log(`SBL onboarding is running: http://localhost:${port}`);
   console.log(`Admin dashboard: http://localhost:${port}/admin`);
   console.log(`Default admin: ${defaultAdminEmail} / ${defaultAdminPassword}`);
