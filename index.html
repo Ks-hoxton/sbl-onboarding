@@ -882,11 +882,13 @@ function cAdvance(id){
   if(!c)return;
   if(c.cur<c.total-1){setTimeout(()=>{cNav(id,1);},700);}
 }
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
   restructureDayLayouts();
   cInit('wqz',3);cInit('d1qz',3);cInit('d2qz',3);cInit('tqz',2);cInit('bqz',2);cInit('sqz',2);cInit('trz',4);
   initTracking();
   initMaterialControls();
+  initDraftAutosave();
+  await loadPersistedProgress();
   updateLocks();
   saveProgress('page_open');
 });
@@ -917,6 +919,7 @@ function setDayOneRating(n){
   stars.forEach((s,i)=>s.classList.toggle('active',i<n));
   const lbl=document.getElementById('day1RatingLabel');
   if(lbl)lbl.textContent=ratingLabels[n]||'';
+  saveProgress('day1_rating_changed');
 }
 function setMetricRating(key,n){
   finalMetricRatings[key]=n;
@@ -924,6 +927,7 @@ function setMetricRating(key,n){
   stars.forEach((s,i)=>s.classList.toggle('active',i<n));
   const label=document.getElementById(`metricLabel-${key}`);
   if(label)label.textContent=ratingLabels[n]||'';
+  saveProgress('final_metric_changed');
 }
 function submitDayOneReflection(btn){
   const expectations=document.getElementById('day1Expectations')?.value?.trim()||'';
@@ -948,6 +952,7 @@ function submitDayOneReflection(btn){
   if(done)done.style.display='block';
   sendEvent('rating',{day:1,value:day1RatingVal,label:'Оценка первого дня: '+(ratingLabels[day1RatingVal]||'')});
   sendEvent('insight',{day:1,mood:'Рефлексия дня 1',text:'Ожидания от работы в SBL:\n'+expectations+'\n\nТемы с вопросами и непонятками:\n'+questions});
+  afterProgress();
 }
 function submitDayThreeCreative(btn){
   const text=document.getElementById('day3CreativeText')?.value?.trim()||'';
@@ -970,12 +975,14 @@ function submitDayThreeCreative(btn){
   const done=document.getElementById('day3CreativeDone');
   if(done)done.style.display='block';
   sendEvent('insight',{day:3,mood:'Творческое задание',text});
+  afterProgress();
 }
 function submitRating(){
   const comment=document.getElementById('ratingComment6')||document.getElementById('ratingComment7');
   const done=document.getElementById('ratingDone6')||document.getElementById('ratingDone7');
   if(comment)comment.style.display='none';
   if(done)done.style.display='block';
+  saveProgress('rating_submitted');
 }
 function submitFinalFeedback(btn){
   const trainer=document.getElementById('finalTrainer6')||document.getElementById('finalTrainer7');
@@ -1069,7 +1076,28 @@ const materialLinks={
 let employeeId='preview';
 let employeeName='Сотрудник';
 let inviteToken='';
+let storagePrefix='sbl:preview';
 let apiEnabled=location.protocol.startsWith('http');
+
+function setStoragePrefix(){
+  storagePrefix='sbl:'+(inviteToken||employeeId||'preview');
+}
+function storageKey(key){return storagePrefix+':'+key;}
+function getStoredJson(key){
+  try{
+    const raw=localStorage.getItem(storageKey(key));
+    return raw?JSON.parse(raw):null;
+  }catch{return null;}
+}
+function setStoredJson(key,value){
+  try{localStorage.setItem(storageKey(key),JSON.stringify(value));}catch{}
+}
+function setStoredValue(key,value){
+  try{localStorage.setItem(storageKey(key),String(value));}catch{}
+}
+function getStoredValue(key){
+  try{return localStorage.getItem(storageKey(key));}catch{return null;}
+}
 
 function restructureDayLayouts(){
   const ph4=document.getElementById('ph4');
@@ -1155,11 +1183,16 @@ function initTracking(){
   employeeId=params.get('employee')||params.get('id')||localStorage.getItem('sblEmployeeId');
   if(!employeeId){
     employeeId='emp-'+Math.random().toString(36).slice(2,8)+'-'+Date.now().toString(36);
-    localStorage.setItem('sblEmployeeId',employeeId);
   }
-  employeeName=params.get('name')||localStorage.getItem('sblEmployeeName')||'';
-  if(params.get('name'))localStorage.setItem('sblEmployeeName',employeeName);
-  day4InsightSent=localStorage.getItem('sblDay4InsightSent')==='true';
+  setStoragePrefix();
+  localStorage.setItem('sblEmployeeId',employeeId);
+  setStoredValue('employeeId',employeeId);
+  employeeName=params.get('name')||getStoredValue('employeeName')||localStorage.getItem('sblEmployeeName')||'';
+  if(params.get('name')){
+    localStorage.setItem('sblEmployeeName',employeeName);
+    setStoredValue('employeeName',employeeName);
+  }
+  day4InsightSent=getStoredValue('day4InsightSent')==='true'||localStorage.getItem('sblDay4InsightSent')==='true';
 }
 
 function completedDaysCount(){
@@ -1197,8 +1230,200 @@ function collectProgressState(){
     quizzes:{done:quizDoneCount+finalQuizDoneCount,total:Object.keys(quizDone).length+Object.keys(finalQuizDone).length},
     bitrixTest:{done:bqDone.size,total:bqTot},
     rating:ratingVal,
-    level:finalAwarded?'Гуру SBL':(lvls[currentDay]||lvls[0])
+    level:finalAwarded?'Гуру SBL':(lvls[currentDay]||lvls[0]),
+    ui:collectUiState()
   };
+}
+
+function getCheckKey(el){
+  const page=el.closest('[id^="ph"]')?.id||'ph?';
+  const title=el.closest('.qr')?.querySelector('.qt')?.textContent?.trim()||'check';
+  return page+'|'+title;
+}
+function getMaterialKey(btn){
+  const page=btn.closest('[id^="ph"]')?.id||'ph?';
+  const title=btn.closest('.qr')?.querySelector('.qt')?.textContent?.trim()
+    || btn.closest('.vcard')?.querySelector('div div')?.textContent?.trim()
+    || 'material';
+  return page+'|'+title+'|'+btn.textContent.trim();
+}
+function getCardKey(card){
+  const page=card.closest('[id^="ph"]')?.id||'ph?';
+  const title=card.querySelector('div div')?.textContent?.trim()||'product';
+  return page+'|'+title;
+}
+function collectUiState(){
+  return {
+    checks:Array.from(document.querySelectorAll('.qch.done')).map(getCheckKey),
+    openedMaterials:Array.from(document.querySelectorAll('.mat-btn.opened')).map(getMaterialKey),
+    learnedCards:Array.from(document.querySelectorAll('.vcard.learned')).map(getCardKey),
+    quizDone:Object.keys(quizDone).filter(key=>quizDone[key]),
+    finalQuizDone:Object.keys(finalQuizDone).filter(key=>finalQuizDone[key]),
+    day1RatingVal,
+    ratingVal,
+    day1ReflectionSent,
+    day3CreativeSent,
+    day4InsightSent,
+    finalFeedbackSent,
+    finalMetricRatings:{...finalMetricRatings},
+    textFields:{
+      day1Expectations:document.getElementById('day1Expectations')?.value||'',
+      day1Questions:document.getElementById('day1Questions')?.value||'',
+      day3CreativeText:document.getElementById('day3CreativeText')?.value||'',
+      day4InsightText:document.querySelector('#ph4 .ins-ta')?.value||'',
+      finalTrainer:(document.getElementById('finalTrainer6')||document.getElementById('finalTrainer7'))?.value||'',
+      finalVk:(document.getElementById('finalVk6')||document.getElementById('finalVk7'))?.value||'',
+      finalWishes:(document.getElementById('finalWishes6')||document.getElementById('finalWishes7'))?.value||''
+    }
+  };
+}
+function renderStars(selector,count){
+  document.querySelectorAll(selector+' .star').forEach((star,index)=>star.classList.toggle('active',index<count));
+}
+function applyProgressState(state){
+  if(!state)return;
+  const ui=state.ui||{};
+  const savedChecks=new Set(ui.checks||[]);
+  const savedMaterials=new Set(ui.openedMaterials||[]);
+  const savedCards=new Set(ui.learnedCards||[]);
+  [s0,s1,s2,s3,s4,s5,s6].forEach((obj,index)=>obj.done=state.dayPercents?.[index]||0);
+  [['p0bar','p0pct',s0],['p1bar','p1pct',s1],['p2bar','p2pct',s2],['p3bar','p3pct',s3],['p4bar','p4pct',s4],['p5bar','p5pct',s5],['p6bar','p6pct',s6]].forEach(args=>upBar(...args));
+  document.querySelectorAll('.qch').forEach(el=>{
+    const done=savedChecks.has(getCheckKey(el));
+    el.classList.toggle('done',done);
+    el.textContent=done?'✓':'';
+  });
+  document.querySelectorAll('.mat-btn').forEach(btn=>{
+    if(!savedMaterials.has(getMaterialKey(btn)))return;
+    btn.classList.add('opened');
+    btn.textContent='Открыто';
+    const check=btn.closest('.qr')?.querySelector('.qch');
+    if(check){
+      check.dataset.materialOpened='true';
+      check.classList.remove('locked');
+    }
+    const card=btn.closest('.vcard');
+    if(card)card.dataset.materialOpened='true';
+  });
+  v2done=0;
+  document.querySelectorAll('.vcard').forEach(card=>{
+    const learned=savedCards.has(getCardKey(card));
+    card.classList.toggle('learned',learned);
+    const status=card.querySelector('.vc-s');
+    if(status){
+      if(learned){
+        status.textContent='✓';
+        status.className='vc-s done';
+        v2done++;
+      }else{
+        status.textContent='○';
+        status.className='vc-s todo';
+      }
+    }
+  });
+  const productsPct=Math.round((v2done/v2tot)*100);
+  [['p2bar','p2pct','p2hint'],['p4bar','p4pct','p4hint']].forEach(([barId,pctId,hintId])=>{
+    const bar=document.getElementById(barId),pctNode=document.getElementById(pctId),hint=document.getElementById(hintId);
+    if(bar)bar.style.width=productsPct+'%';
+    if(pctNode)pctNode.textContent=productsPct+'%';
+    if(hint)hint.textContent='Изучено '+v2done+' из '+v2tot+' продуктов';
+  });
+  Object.keys(quizDone).forEach(key=>quizDone[key]=(ui.quizDone||[]).includes(key));
+  Object.keys(finalQuizDone).forEach(key=>finalQuizDone[key]=(ui.finalQuizDone||[]).includes(key));
+  day1RatingVal=ui.day1RatingVal||0;
+  ratingVal=ui.ratingVal||state.rating||0;
+  day1ReflectionSent=!!ui.day1ReflectionSent;
+  day3CreativeSent=!!ui.day3CreativeSent;
+  day4InsightSent=!!ui.day4InsightSent;
+  finalFeedbackSent=!!ui.finalFeedbackSent;
+  Object.assign(finalMetricRatings,{trainer:0,vk:0,materials:0,comfort:0},ui.finalMetricRatings||{});
+  renderStars('#day1RatingWrap',day1RatingVal);
+  const day1Label=document.getElementById('day1RatingLabel');
+  if(day1Label)day1Label.textContent=ratingLabels[day1RatingVal]||'';
+  renderStars('#ratingWrap6',ratingVal);
+  renderStars('#ratingWrap7',ratingVal);
+  const ratingLabel=document.getElementById('ratingLabel6')||document.getElementById('ratingLabel7');
+  if(ratingLabel)ratingLabel.textContent=ratingLabels[ratingVal]||'';
+  ['trainer','vk','materials','comfort'].forEach(key=>{
+    renderStars(`[data-metric="${key}"]`,finalMetricRatings[key]||0);
+    const label=document.getElementById(`metricLabel-${key}`);
+    if(label)label.textContent=ratingLabels[finalMetricRatings[key]||0]||'';
+  });
+  const tf=ui.textFields||{};
+  if(document.getElementById('day1Expectations'))document.getElementById('day1Expectations').value=tf.day1Expectations||'';
+  if(document.getElementById('day1Questions'))document.getElementById('day1Questions').value=tf.day1Questions||'';
+  if(document.getElementById('day3CreativeText'))document.getElementById('day3CreativeText').value=tf.day3CreativeText||'';
+  const day4Field=document.querySelector('#ph4 .ins-ta');
+  if(day4Field)day4Field.value=tf.day4InsightText||'';
+  const finalTrainerField=document.getElementById('finalTrainer6')||document.getElementById('finalTrainer7');
+  const finalVkField=document.getElementById('finalVk6')||document.getElementById('finalVk7');
+  const finalWishesField=document.getElementById('finalWishes6')||document.getElementById('finalWishes7');
+  if(finalTrainerField)finalTrainerField.value=tf.finalTrainer||'';
+  if(finalVkField)finalVkField.value=tf.finalVk||'';
+  if(finalWishesField)finalWishesField.value=tf.finalWishes||'';
+  if(day1ReflectionSent){
+    const btn=document.querySelector('#ph1 .btn-t');
+    if(btn)btn.style.display='none';
+    const done=document.getElementById('day1ReflectionDone');
+    if(done)done.style.display='block';
+  }
+  if(day3CreativeSent){
+    const btn=document.querySelector('#ph3 .creative .btn-t');
+    if(btn)btn.style.display='none';
+    const done=document.getElementById('day3CreativeDone');
+    if(done)done.style.display='block';
+  }
+  if(day4InsightSent){
+    setStoredValue('day4InsightSent','true');
+    const box=document.querySelector('#ph4 .ins');
+    if(box){
+      const btn=box.querySelector('.ins-btn');
+      const sent=box.querySelector('[id^="insSent"]')||document.getElementById('insSent');
+      if(btn)btn.style.display='none';
+      if(sent)sent.style.display='block';
+    }
+  }
+  if(finalFeedbackSent){
+    const btn=document.querySelector('#ph6 .btn-t, #ph7 .btn-t');
+    if(btn)btn.style.display='none';
+    const done=document.getElementById('finalFeedbackDone6')||document.getElementById('finalFeedbackDone7');
+    if(done)done.style.display='block';
+  }
+  currentDay=Math.min(6,Math.max(0,Number(state.currentDay||0)));
+  finalAwarded=state.level==='Гуру SBL';
+  document.getElementById('navLvl').textContent=finalAwarded?'Уровень 5 — Гуру':(state.level||lvls[currentDay]||lvls[0]);
+  go(currentDay);
+}
+async function loadPersistedProgress(){
+  const localState=getStoredJson('progressState');
+  if(localState)applyProgressState(localState);
+  if(!inviteToken&&!employeeId)return;
+  try{
+    const query=inviteToken?('inviteToken='+encodeURIComponent(inviteToken)):('employeeId='+encodeURIComponent(employeeId));
+    const res=await fetch('/api/employee-state?'+query,{headers:{Accept:'application/json'}});
+    if(!res.ok)return;
+    const data=await res.json();
+    if(data.employee?.id){
+      employeeId=data.employee.id;
+      setStoragePrefix();
+      setStoredValue('employeeId',employeeId);
+    }
+    if(data.employee?.name){
+      employeeName=data.employee.name;
+      setStoredValue('employeeName',employeeName);
+    }
+    if(data.state){
+      setStoredJson('progressState',data.state);
+      applyProgressState(data.state);
+    }
+  }catch{}
+}
+
+function initDraftAutosave(){
+  document.querySelectorAll('textarea').forEach(field=>{
+    field.addEventListener('input',()=>setStoredJson('progressState',collectProgressState()));
+    field.addEventListener('change',()=>saveProgress('draft_changed'));
+  });
 }
 
 function sendEvent(type,payload={}){
@@ -1214,10 +1439,20 @@ function sendEvent(type,payload={}){
       payload,
       state:collectProgressState()
     })
+  }).then(async response=>{
+    if(!response.ok)return null;
+    const data=await response.json().catch(()=>null);
+    if(data?.employeeId){
+      employeeId=data.employeeId;
+      setStoragePrefix();
+      setStoredValue('employeeId',employeeId);
+    }
+    return data;
   }).catch(()=>{});
 }
 
 function saveProgress(reason='progress'){
+  setStoredJson('progressState',collectProgressState());
   sendEvent('progress',{reason});
 }
 
@@ -1513,6 +1748,7 @@ function sendIns(btn){
   if(page?.id==='ph4'){
     day4InsightSent=true;
     localStorage.setItem('sblDay4InsightSent','true');
+    setStoredValue('day4InsightSent','true');
   }
   sendEvent('insight',{day:currentDay,mood,text});
   afterProgress();

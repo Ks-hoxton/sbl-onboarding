@@ -207,6 +207,38 @@ function sanitizeProgressState(state = {}) {
   const totalProgress = clampInt(state.totalProgress, 0, 100);
   const rating = clampInt(state.rating, 0, 5);
   const level = levelLabels.has(state.level) ? state.level : 'Уровень 1 — Кандидат';
+  const rawUi = state.ui && typeof state.ui === 'object' ? state.ui : {};
+  const uniqStrings = values => Array.isArray(values)
+    ? values.map(value => String(value || '').trim()).filter(Boolean).filter((value, index, arr) => arr.indexOf(value) === index)
+    : [];
+  const ui = {
+    checks: uniqStrings(rawUi.checks),
+    openedMaterials: uniqStrings(rawUi.openedMaterials),
+    learnedCards: uniqStrings(rawUi.learnedCards),
+    quizDone: uniqStrings(rawUi.quizDone),
+    finalQuizDone: uniqStrings(rawUi.finalQuizDone),
+    day1RatingVal: clampInt(rawUi.day1RatingVal, 0, 5),
+    ratingVal: clampInt(rawUi.ratingVal, 0, 5),
+    day1ReflectionSent: !!rawUi.day1ReflectionSent,
+    day3CreativeSent: !!rawUi.day3CreativeSent,
+    day4InsightSent: !!rawUi.day4InsightSent,
+    finalFeedbackSent: !!rawUi.finalFeedbackSent,
+    finalMetricRatings: {
+      trainer: clampInt(rawUi.finalMetricRatings?.trainer, 0, 5),
+      vk: clampInt(rawUi.finalMetricRatings?.vk, 0, 5),
+      materials: clampInt(rawUi.finalMetricRatings?.materials, 0, 5),
+      comfort: clampInt(rawUi.finalMetricRatings?.comfort, 0, 5)
+    },
+    textFields: {
+      day1Expectations: String(rawUi.textFields?.day1Expectations || ''),
+      day1Questions: String(rawUi.textFields?.day1Questions || ''),
+      day3CreativeText: String(rawUi.textFields?.day3CreativeText || ''),
+      day4InsightText: String(rawUi.textFields?.day4InsightText || ''),
+      finalTrainer: String(rawUi.textFields?.finalTrainer || ''),
+      finalVk: String(rawUi.textFields?.finalVk || ''),
+      finalWishes: String(rawUi.textFields?.finalWishes || '')
+    }
+  };
 
   return {
     currentDay,
@@ -224,7 +256,8 @@ function sanitizeProgressState(state = {}) {
     quizzes: { done: quizzesDone, total: quizzesTotal },
     bitrixTest: { done: bitrixDone, total: bitrixTotal },
     rating,
-    level
+    level,
+    ui
   };
 }
 
@@ -260,7 +293,7 @@ function resolveEmployee(body, now) {
 
 function publicEmployee(employee) {
   const snapshot = db.prepare('SELECT state_json, updated_at FROM snapshots WHERE employee_id = ?').get(employee.id);
-  const state = snapshot ? JSON.parse(snapshot.state_json) : {};
+  const state = snapshot ? sanitizeProgressState(JSON.parse(snapshot.state_json)) : {};
   const insights = db.prepare('SELECT day, mood, text, created_at AS at FROM insights WHERE employee_id = ? ORDER BY created_at DESC LIMIT 100').all(employee.id);
   const ratings = db.prepare('SELECT value, label, created_at AS at FROM ratings WHERE employee_id = ? ORDER BY created_at DESC LIMIT 50').all(employee.id);
   const overallRatingEntry = ratings.find(item => String(item.label || '').startsWith('Онбординг:'));
@@ -376,6 +409,35 @@ async function handleApi(req, res, url) {
     } catch (error) {
       sendJson(res, 400, { ok: false, error: error.message });
     }
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/employee-state') {
+    const inviteToken = String(url.searchParams.get('inviteToken') || '').trim();
+    const employeeId = String(url.searchParams.get('employeeId') || '').trim();
+    let employee = inviteToken
+      ? db.prepare('SELECT * FROM employees WHERE invite_token = ?').get(inviteToken)
+      : null;
+    if (!employee && employeeId) {
+      employee = db.prepare('SELECT * FROM employees WHERE id = ?').get(employeeId);
+    }
+    if (!employee) {
+      sendJson(res, 404, { ok: false, error: 'Employee not found' });
+      return true;
+    }
+    const snapshot = db.prepare('SELECT state_json, updated_at FROM snapshots WHERE employee_id = ?').get(employee.id);
+    const state = snapshot ? sanitizeProgressState(JSON.parse(snapshot.state_json)) : null;
+    sendJson(res, 200, {
+      ok: true,
+      employee: {
+        id: employee.id,
+        name: employee.name,
+        inviteToken: employee.invite_token,
+        firstSeen: employee.first_seen_at,
+        lastSeen: employee.last_seen_at
+      },
+      state
+    });
     return true;
   }
 
