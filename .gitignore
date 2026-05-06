@@ -1,0 +1,4 @@
+.DS_Store
+data/onboarding.sqlite
+latest-sbl-local-build.zip
+*.log

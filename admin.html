@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBL Онбординг — админка</title>
+<style>
+:root{--teal:#1A6B5A;--teal-d:#134D41;--teal-xl:#E8F4F1;--red:#D93B2B;--gold:#C9A96E;--off:#F6F8F7;--gray:#6B7B76;--gray-l:#E2ECEA;--dark:#111E1A;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--off);color:var(--dark);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.top{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--gray-l);padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.brand{font-size:20px;font-weight:800;color:var(--teal-d)}
+.sub{font-size:12px;color:var(--gray);margin-top:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:20px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--gray-l);border-radius:12px;padding:14px}
+.stat-n{font-size:28px;font-weight:800;color:var(--teal-d)}
+.stat-l{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+input,select{border:1px solid var(--gray-l);border-radius:10px;padding:10px 12px;font:inherit;background:#fff;color:var(--dark)}
+input{flex:1;min-width:240px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.card{background:#fff;border:1px solid var(--gray-l);border-radius:14px;padding:16px;box-shadow:0 10px 28px rgba(17,30,26,.04)}
+.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.name{font-size:16px;font-weight:800;color:var(--dark)}
+.meta{font-size:11px;color:var(--gray);line-height:1.5;margin-top:3px}
+.pill{font-size:11px;font-weight:700;border-radius:999px;padding:5px 10px;background:var(--teal-xl);color:var(--teal-d);white-space:nowrap}
+.pill.warn{background:#F7EEEC;color:var(--red)}
+.progress{height:10px;background:var(--gray-l);border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.bar{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:999px;transition:width .2s}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.mini{background:var(--off);border-radius:10px;padding:10px}
+.mini-n{font-size:18px;font-weight:800;color:var(--teal-d)}
+.mini-l{font-size:10px;color:var(--gray);margin-top:2px}
+.days{display:flex;gap:4px;margin:12px 0}
+.day{height:22px;flex:1;border-radius:6px;background:var(--gray-l);position:relative;overflow:hidden}
+.day span{display:block;height:100%;background:var(--teal)}
+.insights{margin-top:12px;border-top:1px solid var(--gray-l);padding-top:10px}
+.insight{font-size:12px;line-height:1.45;background:var(--off);border-radius:9px;padding:9px;margin-top:6px}
+.stars{color:var(--gold);font-size:14px;letter-spacing:1px}
+.empty{background:#fff;border:1px dashed var(--gray-l);border-radius:14px;padding:36px;text-align:center;color:var(--gray)}
+.risk{font-size:12px;color:var(--red);font-weight:700;margin-top:8px}
+.details{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.detail{background:var(--teal-xl);border-radius:9px;padding:8px}
+.detail-l{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--gray);margin-bottom:2px}
+.detail-v{font-size:12px;font-weight:700;color:var(--teal-d);line-height:1.25}
+.card-actions{display:flex;gap:8px;margin-top:12px;justify-content:flex-end}
+.login{max-width:420px;margin:80px auto;background:#fff;border:1px solid var(--gray-l);border-radius:16px;padding:24px;box-shadow:0 16px 40px rgba(17,30,26,.08)}
+.login h1{font-size:22px;margin:0 0 8px;color:var(--teal-d)}
+.login p{font-size:13px;color:var(--gray);line-height:1.5}
+.login input{width:100%;margin-top:10px}
+.btn{border:none;background:var(--teal);color:#fff;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
+.btn.secondary{background:var(--dark)}
+.btn.danger{background:var(--red)}
+.creator{background:#fff;border:1px solid var(--gray-l);border-radius:14px;padding:16px;margin-bottom:16px}
+.creator-title{font-size:15px;font-weight:800;color:var(--teal-d);margin-bottom:10px}
+.creator-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.creator-grid input{min-width:0;width:100%}
+.invite-box{margin-top:10px;background:var(--teal-xl);border-radius:10px;padding:10px;font-size:12px;color:var(--teal-d);display:none;word-break:break-all}
+.hidden{display:none!important}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.top{align-items:flex-start;flex-direction:column}.row,.details{grid-template-columns:1fr}}
+.admin-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media(max-width:760px){.creator-grid{grid-template-columns:1fr}.admin-actions{width:100%}}
+</style>
+</head>
+<body>
+<section class="login hidden" id="loginView">
+  <h1>Вход в админку</h1>
+  <p>Единый кабинет для просмотра прогресса сотрудников и генерации персональных ссылок.</p>
+  <input id="loginEmail" type="email" placeholder="Email">
+  <input id="loginPassword" type="password" placeholder="Пароль">
+  <button class="btn" style="width:100%;margin-top:14px" onclick="login()">Войти</button>
+  <p id="loginError" style="color:var(--red);display:none"></p>
+</section>
+<div class="top hidden" id="topView">
+  <div>
+    <div class="brand">SBL Онбординг — админка</div>
+    <div class="sub">Один общий кабинет: прогресс, дни с первого входа, инсайты, оценки и точки риска</div>
+  </div>
+  <div class="admin-actions">
+    <button class="btn" onclick="loadData()">Обновить</button>
+    <button class="btn secondary" onclick="logout()">Выйти</button>
+  </div>
+</div>
+<main class="wrap hidden" id="adminView">
+  <section class="creator">
+    <div class="creator-title">Добавить сотрудника и сгенерировать ссылку</div>
+    <div class="creator-grid">
+      <input id="newName" placeholder="Имя сотрудника">
+      <input id="newEmail" placeholder="Email">
+      <input id="newDepartment" placeholder="Отдел">
+      <input id="newBuddy" placeholder="Buddy">
+      <input id="newTrainer" placeholder="Руководитель">
+      <input id="newStartDate" type="date" placeholder="Дата выхода">
+    </div>
+    <button class="btn" style="margin-top:10px" onclick="createEmployee()">Создать ссылку</button>
+    <div class="invite-box" id="inviteBox"></div>
+  </section>
+  <section class="stats" id="stats"></section>
+  <div class="toolbar">
+    <input id="search" placeholder="Найти сотрудника..." oninput="render()">
+    <select id="filter" onchange="render()">
+      <option value="all">Все сотрудники</option>
+      <option value="risk">Отстают</option>
+      <option value="active">Активные за 24 часа</option>
+      <option value="done">Завершили</option>
+    </select>
+  </div>
+  <section class="grid" id="employees"></section>
+</main>
+<script>
+let data={totals:{},employees:[]};
+const dayNames=['Welcome','День 1','День 2','День 3','День 4','День 5','День 6'];
+
+function showLogin(){
+  document.getElementById('loginView').classList.remove('hidden');
+  document.getElementById('topView').classList.add('hidden');
+  document.getElementById('adminView').classList.add('hidden');
+}
+function showAdmin(){
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('topView').classList.remove('hidden');
+  document.getElementById('adminView').classList.remove('hidden');
+}
+async function checkSession(){
+  const res=await fetch('/api/admin/me',{cache:'no-store'});
+  const json=await res.json();
+  if(json.ok){
+    showAdmin();
+    await loadData();
+  } else {
+    showLogin();
+  }
+}
+async function login(){
+  const error=document.getElementById('loginError');
+  error.style.display='none';
+  const res=await fetch('/api/admin/login',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      email:document.getElementById('loginEmail').value.trim(),
+      password:document.getElementById('loginPassword').value
+    })
+  });
+  const json=await res.json();
+  if(!json.ok){
+    error.textContent=json.error||'Не удалось войти';
+    error.style.display='block';
+    return;
+  }
+  showAdmin();
+  await loadData();
+}
+async function logout(){
+  await fetch('/api/admin/logout',{method:'POST'});
+  showLogin();
+}
+async function createEmployee(){
+  const name=document.getElementById('newName').value.trim();
+  if(!name){
+    alert('Укажите имя сотрудника.');
+    return;
+  }
+  const res=await fetch('/api/admin/employees',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      name,
+      email:document.getElementById('newEmail').value.trim(),
+      department:document.getElementById('newDepartment').value.trim(),
+      buddy:document.getElementById('newBuddy').value.trim(),
+      trainer:document.getElementById('newTrainer').value.trim(),
+      startDate:document.getElementById('newStartDate').value
+    })
+  });
+  if(res.status===401){showLogin();return;}
+  const json=await res.json();
+  if(!json.ok){
+    alert(json.error||'Не удалось создать сотрудника');
+    return;
+  }
+  const box=document.getElementById('inviteBox');
+  const url=json.inviteUrl||json.employee?.inviteUrl||'';
+  box.style.display='block';
+  box.innerHTML=`<strong>Персональная ссылка:</strong><br><span id="inviteUrl">${url}</span><br><button class="btn" style="margin-top:8px" onclick="copyInvite()">Скопировать</button>`;
+  await loadData();
+}
+async function copyInvite(){
+  const text=document.getElementById('inviteUrl')?.textContent||'';
+  await navigator.clipboard.writeText(text);
+}
+
+function daysWord(n){
+  if(n%10===1&&n%100!==11)return 'день';
+  if([2,3,4].includes(n%10)&&![12,13,14].includes(n%100))return 'дня';
+  return 'дней';
+}
+function fmtDate(iso){
+  if(!iso)return 'нет данных';
+  return new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(iso));
+}
+function isRisk(e){
+  return e.daysSinceFirstSeen>=3&&e.completedDaysCount<Math.min(e.daysSinceFirstSeen, e.totalDays);
+}
+function stars(n){
+  return n?'<span class="stars">'+('★'.repeat(n))+'</span>':'-';
+}
+function esc(value){
+  return String(value??'').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[ch]));
+}
+function renderStats(){
+  const t=data.totals||{};
+  document.getElementById('stats').innerHTML=[
+    ['Сотрудников',t.employees||0],
+    ['Активны сегодня',t.activeToday||0],
+    ['Завершили',t.completed||0],
+    ['Средний прогресс',(t.averageProgress||0)+'%'],
+    ['Инсайтов',t.insights||0]
+  ].map(([label,value])=>`<div class="stat"><div class="stat-n">${value}</div><div class="stat-l">${label}</div></div>`).join('');
+}
+function renderEmployee(e){
+  const expected=Math.min(e.daysSinceFirstSeen,e.totalDays);
+  const risk=isRisk(e);
+  const recentInsights=(e.insights||[]).slice(-2).reverse();
+  const rating=e.overallRating||e.rating||0;
+  const days=(e.dayPercents||Array(7).fill(0)).slice(0,7);
+  const deleteArg=esc(JSON.stringify(e.id));
+  while(days.length<7)days.push(0);
+  return `<article class="card">
+    <div class="head">
+      <div>
+        <div class="name">${esc(e.name)}</div>
+        <div class="meta">ID: ${esc(e.id)}<br>Первый вход: ${fmtDate(e.firstSeen)} · ${e.daysSinceFirstSeen} ${daysWord(e.daysSinceFirstSeen)} назад<br>Последняя активность: ${fmtDate(e.lastSeen)}</div>
+      </div>
+      <div class="pill ${risk?'warn':''}">${risk?'Нужна помощь':esc(e.level)}</div>
+    </div>
+    <div class="details">
+      <div class="detail"><div class="detail-l">Сотрудник</div><div class="detail-v">${esc(e.name)}</div></div>
+      <div class="detail"><div class="detail-l">Отдел</div><div class="detail-v">${esc(e.department||'Не указан')}</div></div>
+      <div class="detail"><div class="detail-l">Buddy</div><div class="detail-v">${esc(e.buddy||'Не назначен')}</div></div>
+      <div class="detail"><div class="detail-l">Руководитель</div><div class="detail-v">${esc(e.trainer||'Не назначен')}</div></div>
+    </div>
+    <div class="progress"><div class="bar" style="width:${e.totalProgress||0}%"></div></div>
+    <div class="meta">${e.completedDaysCount}/${e.totalDays} дней закрыто · сейчас: ${esc(e.currentDayLabel)}</div>
+    ${risk?`<div class="risk">Ожидали минимум ${expected} ${daysWord(expected)} прогресса, закрыто ${e.completedDaysCount}. Стоит написать сотруднику.</div>`:''}
+    <div class="days">${days.map((v,i)=>`<div class="day" title="${dayNames[i]}: ${v}%"><span style="width:${Math.min(100,v)}%"></span></div>`).join('')}</div>
+    <div class="row">
+      <div class="mini"><div class="mini-n">${e.checklist.done}/${e.checklist.total}</div><div class="mini-l">заданий закрыто</div></div>
+      <div class="mini"><div class="mini-n">${e.materials.opened}/${e.materials.total}</div><div class="mini-l">материалов открыто</div></div>
+      <div class="mini"><div class="mini-n">${e.quizzes.done}/${e.quizzes.total}</div><div class="mini-l">квизов пройдено</div></div>
+      <div class="mini"><div class="mini-n">${stars(rating)}</div><div class="mini-l">оценка онбординга</div></div>
+    </div>
+    <div class="insights">
+      <div class="meta">Последние инсайты</div>
+      ${recentInsights.length?recentInsights.map(i=>`<div class="insight"><strong>${esc(i.mood||'Инсайт')}</strong><br>${esc(i.text||'Без текста')}<br><span class="meta">${fmtDate(i.at)}</span></div>`).join(''):'<div class="insight">Пока нет инсайтов</div>'}
+    </div>
+    <div class="card-actions">
+      <button class="btn danger" onclick="deleteEmployee(${deleteArg})">Удалить сотрудника</button>
+    </div>
+  </article>`;
+}
+async function deleteEmployee(id){
+  const employee=(data.employees||[]).find(item=>item.id===id);
+  const name=employee?.name||id;
+  if(!confirm(`Удалить сотрудника "${name}" и все связанные данные: прогресс, инсайты, оценки и события?`))return;
+  const res=await fetch('/api/admin/employees/'+encodeURIComponent(id),{method:'DELETE'});
+  if(res.status===401){showLogin();return;}
+  const json=await res.json();
+  if(!json.ok){
+    alert(json.error||'Не удалось удалить сотрудника');
+    return;
+  }
+  await loadData();
+}
+function render(){
+  renderStats();
+  const q=document.getElementById('search').value.toLowerCase();
+  const filter=document.getElementById('filter').value;
+  let employees=(data.employees||[]).filter(e=>(e.name+' '+e.id+' '+(e.department||'')+' '+(e.buddy||'')+' '+(e.trainer||'')).toLowerCase().includes(q));
+  if(filter==='risk')employees=employees.filter(isRisk);
+  if(filter==='active')employees=employees.filter(e=>e.lastSeen&&Date.now()-new Date(e.lastSeen).getTime()<86400000);
+  if(filter==='done')employees=employees.filter(e=>e.completedDaysCount>=e.totalDays);
+  document.getElementById('employees').innerHTML=employees.length?employees.map(renderEmployee).join(''):'<div class="empty">Пока нет данных. Откройте онбординг через ссылку сотрудника и сделайте несколько действий.</div>';
+}
+async function loadData(){
+  const res=await fetch('/api/admin',{cache:'no-store'});
+  if(res.status===401){showLogin();return;}
+  data=await res.json();
+  render();
+}
+checkSession();
+setInterval(loadData,15000);
+</script>
+</body>
+</html>
