@@ -6,10 +6,10 @@
 <title>Shamayev — Онбординг</title>
 <style>
 :root{
-  --teal:#1A6B5A;--teal-d:#134D41;--teal-l:#2A8570;--teal-xl:#E8F4F1;
-  --red:#D93B2B;--red-l:#F7EEEC;
-  --white:#fff;--off:#F6F8F7;--gray:#6B7B76;--gray-l:#E2ECEA;
-  --dark:#111E1A;--gold:#C9A96E;--gold-l:#FBF5EC;--gold-d:#7A5B1A;
+  --teal:#005761;--teal-d:#003f46;--teal-l:#1a6d76;--teal-xl:#e6f3f4;
+  --red:#F0493D;--red-l:#fde9e7;
+  --white:#fff;--off:#f4f8f8;--gray:#5f7378;--gray-l:#d9e4e6;
+  --dark:#0b2c31;--gold:#F0493D;--gold-l:#fff0ee;--gold-d:#b33830;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--off);color:var(--dark)}
@@ -96,7 +96,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .vfull{background:var(--dark);border-radius:14px;padding:22px;text-align:center;margin-bottom:10px;width:100%}
 .vplay{width:52px;height:52px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;cursor:pointer}
 .mia-hero{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,var(--teal-xl),#fff);border:1px solid var(--gray-l);border-radius:16px;padding:18px;margin-bottom:14px}
-.mia-avatar{width:110px;height:110px;border-radius:50%;background:#0f6670;flex-shrink:0;box-shadow:0 14px 28px rgba(26,107,90,.18);border:4px solid #fff;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.mia-avatar{width:110px;height:110px;border-radius:50%;background:var(--teal);flex-shrink:0;box-shadow:0 14px 28px rgba(0,87,97,.18);border:4px solid #fff;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .mia-avatar img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
 .mia-bubble{position:relative;flex:1;background:#fff;border:1px solid var(--gray-l);border-radius:18px;padding:18px 20px 18px 22px;box-shadow:0 10px 24px rgba(17,30,26,.05)}
 .mia-bubble::before{content:"";position:absolute;left:-12px;top:38px;width:22px;height:22px;background:#fff;border-left:1px solid var(--gray-l);border-bottom:1px solid var(--gray-l);transform:rotate(45deg)}
@@ -104,8 +104,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .mia-name{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:4px}
 .mia-role{font-size:11px;color:var(--gray);margin-bottom:10px}
 .mia-copy{font-size:13px;color:var(--dark);line-height:1.75}
-.ceo-hero{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,#fff,#FBF5EC);border:1px solid var(--gray-l);border-radius:16px;padding:18px;margin:14px 0}
-.ceo-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--teal-d),var(--teal-l));display:flex;align-items:center;justify-content:center;flex-shrink:0;border:4px solid #fff;box-shadow:0 14px 28px rgba(26,107,90,.18);overflow:hidden}
+.ceo-hero{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,#fff,var(--gold-l));border:1px solid var(--gray-l);border-radius:16px;padding:18px;margin:14px 0}
+.ceo-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--teal-d),var(--teal-l));display:flex;align-items:center;justify-content:center;flex-shrink:0;border:4px solid #fff;box-shadow:0 14px 28px rgba(0,87,97,.18);overflow:hidden}
 .ceo-avatar img{width:100%;height:100%;object-fit:cover;display:block}
 .ceo-bubble{position:relative;flex:1;background:#fff;border:1px solid var(--gray-l);border-radius:18px;padding:18px 20px 18px 22px;box-shadow:0 10px 24px rgba(17,30,26,.05)}
 .ceo-bubble::before{content:"";position:absolute;left:-12px;top:38px;width:22px;height:22px;background:#fff;border-left:1px solid var(--gray-l);border-bottom:1px solid var(--gray-l);transform:rotate(45deg)}
@@ -197,7 +197,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 /* ── LEVEL-UP POPUP ─────────────────────────────────────────────── */
 #lvlPopup{
   display:none;position:fixed;inset:0;z-index:9999;
-  background:rgba(10,30,20,.82);
+  background:rgba(11,44,49,.82);
   align-items:center;justify-content:center;
 }
 #lvlPopup.show{display:flex;animation:fadeIn .25s ease}
@@ -218,19 +218,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 @keyframes levelPop{0%{transform:scale(.45) rotate(-5deg);opacity:0}55%{transform:scale(1.08) rotate(2deg)}75%{transform:scale(.98) rotate(-1deg)}100%{transform:scale(1) rotate(0);opacity:1}}
 .lvl-box .confetti{font-size:48px;display:block;margin-bottom:8px;animation:bounce 1s ease infinite alternate}
 @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-8px)}}
-.lvl-box .lvl-title{font-size:22px;font-weight:700;color:#134D41;margin-bottom:6px}
+.lvl-box .lvl-title{font-size:22px;font-weight:700;color:var(--teal-d);margin-bottom:6px}
 .lvl-box .lvl-name{
-  display:inline-block;background:linear-gradient(135deg,#1A6B5A,#2A8570);
+  display:inline-block;background:linear-gradient(135deg,var(--teal),var(--teal-l));
   color:#fff;border-radius:20px;padding:5px 18px;
   font-size:15px;font-weight:600;margin-bottom:14px
 }
-.lvl-box .lvl-msg{font-size:13px;color:#6B7B76;line-height:1.6;margin-bottom:22px}
+.lvl-box .lvl-msg{font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:22px}
 .lvl-box.diploma{max-width:460px;border:3px double var(--gold);background:linear-gradient(180deg,#fff,#FBF5EC);overflow:hidden}
 .lvl-box.diploma::before{content:"🎈 🎊 ✨ 🎉 🎈";display:block;font-size:24px;letter-spacing:8px;margin-bottom:8px;animation:bounce 1.1s ease infinite alternate}
 .lvl-box.diploma .lvl-name{background:linear-gradient(135deg,var(--gold-d),var(--gold));font-size:17px}
 .lvl-box.diploma .lvl-msg{color:var(--dark)}
 .lvl-box .lvl-btn{
-  background:#D93B2B;color:#fff;border:none;
+  background:var(--red);color:#fff;border:none;
   border-radius:12px;padding:12px 32px;
   font-size:14px;font-weight:600;cursor:pointer;
   width:100%;transition:opacity .15s
@@ -304,8 +304,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
         <div class="qr"><div class="qch" onclick="chk(this,15,'p0bar','p0pct',s0)"></div><div class="qi" style="background:var(--teal-xl)">✍️</div><div class="qb"><div class="qt">Подписать NDA и трудовой договор</div><div class="qs">Соглашение о конфиденциальности · политика безопасности данных</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+15%</span></div></div></div>
         <div class="qr"><div class="qch" onclick="chk(this,12,'p0bar','p0pct',s0)"></div><div class="qi" style="background:var(--gold-l)">📧</div><div class="qb"><div class="qt">Открыть письмо с доступами и добавиться в группы</div><div class="qs">Почта · доступы · рабочие чаты и группы SBL</div><div class="qm"><span class="tag tgr">5 мин</span><span class="tag to">+12%</span></div></div></div>
         <div class="qr"><div class="qch" onclick="chk(this,12,'p0bar','p0pct',s0)"></div><div class="qi" style="background:var(--teal-xl)">🎬</div><div class="qb"><div class="qt">Посмотреть приветственное видео от Екатерины в письме</div><div class="qs">Видео находится в письме с доступами · без отдельной кнопки</div><div class="qm"><span class="tag tgr">3 мин</span><span class="tag to">+12%</span></div></div></div>
-        <div class="qr"><div class="qch" onclick="chk(this,12,'p0bar','p0pct',s0)"></div><div class="qi" style="background:var(--teal-xl)">🌐</div><div class="qb"><div class="qt">Изучить сайт shamayevlaw.com</div><div class="qs">Все страницы: визы, о компании, услуги, блог, отзывы</div><div class="qm"><span class="tag tgr">20 мин</span><span class="tag to">+12%</span></div></div></div>
-        <div class="qr"><div class="qch" onclick="chk(this,12,'p0bar','p0pct',s0)"></div><div class="qi" style="background:var(--teal-xl)">📱</div><div class="qb"><div class="qt">Посмотреть соцсети компании</div><div class="qs">LinkedIn · YouTube · Instagram · Telegram</div><div class="qm"><span class="tag tgr">15 мин</span><span class="tag to">+12%</span></div></div></div>
         <div class="qr"><div class="qch" onclick="chk(this,11,'p0bar','p0pct',s0)"></div><div class="qi" style="background:var(--teal-xl)">🤝</div><div class="qb"><div class="qt">Познакомиться с сотрудником внутренних коммуникаций</div><div class="qs">Кто будет рядом и поможет с адаптацией в компании</div><div class="qm"><span class="tag to">+11%</span></div></div></div>
         <div class="qr"><div class="qch" onclick="chk(this,11,'p0bar','p0pct',s0)"></div><div class="qi" style="background:var(--gold-l)">✨</div><div class="qb"><div class="qt">Быть готовым к новому старту в первый рабочий день</div><div class="qs">Проверьте доступы, группы и настройтесь на уверенный старт</div><div class="qm"><span class="tag to">+11%</span></div></div></div>
       </div>
@@ -320,36 +318,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
         <div class="urow" style="border-color:rgba(255,255,255,.15)"><span>📋</span><span style="color:rgba(255,255,255,.8);font-size:12px">Профиль в корп портале</span></div>
         <div class="urow" style="border:none"><span>🏆</span><span style="color:rgba(255,255,255,.8);font-size:12px">Место в рейтинге когорты</span></div>
       </div>
-      <div class="sec">Мини-квиз — первое знакомство</div>
+      <div class="sec">Творческое задание — путь клиента</div>
       <div class="card">
-        <div style="font-size:10px;font-weight:600;color:var(--teal);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px">3 вопроса</div>
-        <div class="carousel-wrap">
-          <div class="carousel-track" id="wqz-track">
-            <div class="carousel-slide">
-              <div class="cq-label">Вопрос 1 из 3</div>
-              <div class="cq-q">IT-специалист, 8 лет опыта, выступает на конференциях, есть публикации. Хочет в США. Какая виза?</div>
-              <div id="wq1"><div class="mqo" onclick="mq('wq1',this,'no','Нет. E-2 — инвестиционная виза.')">E-2 — инвестиционная</div><div class="mqo" onclick="mq('wq1',this,'ok','Верно! O-1A — идеально. Публикации + конференции = критерии закрыты.',true,'wqz',1)">O-1A — виза таланта в бизнесе/IT</div><div class="mqo" onclick="mq('wq1',this,'no','Нет. L-1 — для перевода внутри компании.')">L-1 — корпоративный перевод</div><div class="mqo" onclick="mq('wq1',this,'close','Почти! EB-1A — грин-карта таланта. Начинают с O-1A, потом переходят.',true,'wqz',1)">EB-1A — грин-карта таланта</div></div>
-              <div id="wq1fb" class="mqfb"></div>
-            </div>
-            <div class="carousel-slide">
-              <div class="cq-label">Вопрос 2 из 3</div>
-              <div class="cq-q">Сколько ступеней в системе проверки документов SBL?</div>
-              <div id="wq2"><div class="mqo" onclick="mq('wq2',this,'no','Нет. Ступеней 4.')">3 — Паралигал, Адвокат, Клиент</div><div class="mqo" onclick="mq('wq2',this,'ok','Верно! Паралигал → Супервайзер → Стратегия → Адвокат.',true,'wqz',2)">4 — Паралигал, Супервайзер, Стратегия, Адвокат</div><div class="mqo" onclick="mq('wq2',this,'no','Нет. Только 4 ступени.')">2 — Адвокат и Паралигал</div></div>
-              <div id="wq2fb" class="mqfb"></div>
-            </div>
-            <div class="carousel-slide">
-              <div class="cq-label">Вопрос 3 из 3</div>
-              <div class="cq-q">Что такое Мандамус в SBL?</div>
-              <div id="wq3"><div class="mqo" onclick="mq('wq3',this,'no','Нет. Это не тип визы.')">Специальный тип визы</div><div class="mqo" onclick="mq('wq3',this,'ok','Верно! Иск для ускорения USCIS. Более 90% успеха.',true,'wqz',3)">Иск в суд для ускорения USCIS</div><div class="mqo" onclick="mq('wq3',this,'no','Нет. Меморандум — финальный документ адвоката.')">Финальный меморандум адвоката</div></div>
-              <div id="wq3fb" class="mqfb"></div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-nav">
-          <button class="cnavbtn" id="wqz-prev" onclick="cNav('wqz',-1)" disabled>← Назад</button>
-          <div class="cdots" id="wqz-dots"><div class="cdot active" onclick="cGo('wqz',0)"></div><div class="cdot" onclick="cGo('wqz',1)"></div><div class="cdot" onclick="cGo('wqz',2)"></div></div>
-          <button class="cnavbtn" id="wqz-next" onclick="cNav('wqz',1)">Далее →</button>
-        </div>
+        <div style="font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:12px">Представьте, что вы сами хотите получить визу в США. Попробуйте найти SBL как потенциальный клиент: зайдите на сайт, подумайте, что бы вы читали первым, и коротко опишите свой путь — от первого запроса до решения обратиться в компанию.</div>
+        <textarea class="ins-ta" id="welcomePathText" style="background:#fff;color:var(--dark);border:1px solid var(--gray-l);height:128px" placeholder="Опишите, как бы вы нас искали, что бы увидели первым, что вызвало бы доверие и почему вы бы решили пойти дальше с SBL"></textarea>
+        <button class="btn btn-t" style="margin-top:0" onclick="submitWelcomePath(this)">Сохранить задание</button>
+        <div id="welcomePathDone" style="display:none;text-align:center;padding-top:10px;font-size:12px;color:var(--teal)">✓ Задание по пути клиента сохранено</div>
+        <div class="qr" style="padding-top:12px;border:none"><div class="qch" onclick="markWelcomePath(this,24,'p0bar','p0pct',s0)"></div><div class="qb"><div class="qt" style="font-size:12px">Задание по пути клиента выполнено</div><div class="qs">Представьте себя на месте клиента и опишите, как бы вы нашли SBL и почему обратились бы именно к нам</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+24%</span></div></div></div>
       </div>
     </div>
   </div>
@@ -371,10 +346,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <div class="sec">ВК приветствует · добро пожаловать!</div>
       <div class="card">
         <div style="background:var(--teal-xl);border-radius:10px;padding:14px;margin-bottom:12px;border-left:3px solid var(--teal)"><div style="font-size:13px;font-weight:600;color:var(--teal-d);margin-bottom:4px">👋 Сегодня особенный день</div><div style="font-size:12px;color:var(--teal-d);line-height:1.6">Вы присоединились к команде Shamayev Business Law. Мы рады, что вы здесь. Сегодня ваш фокус — познакомиться с людьми, почувствовать темп команды и спокойно войти в первый рабочий день.</div></div>
-        <div class="qr"><div class="qch" onclick="chk(this,20,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--teal-xl)">💬</div><div class="qb"><div class="qt">Написать в индивидуальный чат приветствие</div><div class="qs">Коротко представьтесь и начните общение с командой</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+20%</span></div></div></div>
-        <div class="qr"><div class="qch" onclick="chk(this,20,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--teal-xl)">🎬</div><div class="qb"><div class="qt">Сходить на велкам-встречу</div><div class="qs">Узнать историю SBL, миссию и команду</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+20%</span></div></div></div>
-        <div class="qr"><div class="qch" onclick="chk(this,20,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--gold-l)">🤝</div><div class="qb"><div class="qt">Поздороваться с тренером</div><div class="qs">Тренер напишет первым — ответьте и познакомьтесь</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+20%</span></div></div></div>
-        <div class="qr"><div class="qch" onclick="chk(this,20,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--teal-xl)">🎮</div><div class="qb"><div class="qt">Начать самообучение на онбординг-портале</div><div class="qs">Изучить Welcome-раздел · выполнить первые задания</div><div class="qm"><span class="tag to">+20%</span></div></div></div>
+        <div class="qr"><div class="qch" onclick="chk(this,12,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--teal-xl)">💬</div><div class="qb"><div class="qt">Написать в индивидуальный чат приветствие</div><div class="qs">Коротко представьтесь и начните общение с командой</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+12%</span></div></div></div>
+        <div class="qr"><div class="qch" onclick="chk(this,12,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--teal-xl)">🎬</div><div class="qb"><div class="qt">Сходить на велкам-встречу</div><div class="qs">Узнать историю SBL, миссию и команду</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+12%</span></div></div></div>
+        <div class="qr"><div class="qch" onclick="chk(this,12,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--gold-l)">🤝</div><div class="qb"><div class="qt">Поздороваться с тренером</div><div class="qs">Тренер напишет первым — ответьте и познакомьтесь</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+12%</span></div></div></div>
+        <div class="qr"><div class="qch" onclick="chk(this,12,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--teal-xl)">🎮</div><div class="qb"><div class="qt">Начать самообучение на онбординг-портале</div><div class="qs">Изучить Welcome-раздел · выполнить первые задания</div><div class="qm"><span class="tag to">+12%</span></div></div></div>
+        <div class="qr"><div class="qch" onclick="chk(this,10,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--teal-xl)">🌐</div><div class="qb"><div class="qt">Изучить сайт shamayevlaw.com</div><div class="qs">Все страницы: визы, о компании, услуги, блог, отзывы</div><div class="qm"><span class="tag tgr">20 мин</span><span class="tag to">+10%</span></div></div></div>
+        <div class="qr"><div class="qch" onclick="chk(this,10,'p1bar','p1pct',s1)"></div><div class="qi" style="background:var(--teal-xl)">📱</div><div class="qb"><div class="qt">Посмотреть соцсети компании</div><div class="qs">LinkedIn · YouTube · Instagram · Telegram</div><div class="qm"><span class="tag tgr">15 мин</span><span class="tag to">+10%</span></div></div></div>
       </div>
       <div class="sec">Рефлексия первого дня</div>
       <div class="card">
@@ -388,10 +365,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
         <textarea class="ins-ta" id="day1Questions" style="background:#fff;color:var(--dark);border:1px solid var(--gray-l);height:110px" placeholder="Выберите темы из обучения, где у вас остались вопросы или непонятки, и напишите вопросы сюда"></textarea>
         <button class="btn btn-t" style="margin-top:0" onclick="submitDayOneReflection(this)">Отправить тренеру</button>
         <div id="day1ReflectionDone" style="display:none;text-align:center;padding-top:10px;font-size:12px;color:var(--teal)">✓ Рефлексия первого дня отправлена</div>
-        <div class="qr" style="padding-top:12px;border:none"><div class="qch" onclick="markDayOneReflection(this,20,'p1bar','p1pct',s1)"></div><div class="qb"><div class="qt" style="font-size:12px">Рефлексия дня заполнена и отправлена тренеру</div><div class="qs">Оценка дня, ожидания от работы в SBL и вопросы по темам из обучения</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+20%</span></div></div></div>
+        <div class="qr" style="padding-top:12px;border:none"><div class="qch" onclick="markDayOneReflection(this,16,'p1bar','p1pct',s1)"></div><div class="qb"><div class="qt" style="font-size:12px">Рефлексия дня заполнена и отправлена тренеру</div><div class="qs">Оценка дня, ожидания от работы в SBL и вопросы по темам из обучения</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+16%</span></div></div></div>
       </div>
     </div>
     <div>
+      <div class="sec">Мини-квиз — визы и продукты SBL</div>
+      <div class="card">
+        <div style="font-size:10px;font-weight:600;color:var(--teal);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px">3 вопроса</div>
+        <div class="carousel-wrap">
+          <div class="carousel-track" id="wqz-track">
+            <div class="carousel-slide">
+              <div class="cq-label">Вопрос 1 из 3</div>
+              <div class="cq-q">IT-специалист, 8 лет опыта, выступает на конференциях, есть публикации. Хочет в США. Какая виза?</div>
+              <div id="wq1"><div class="mqo" onclick="mq('wq1',this,'no','Нет. E-2 — инвестиционная виза.')">E-2 — инвестиционная</div><div class="mqo" onclick="mq('wq1',this,'ok','Верно! O-1A — идеально. Публикации + конференции = критерии закрыты.',true,'wqz',1)">O-1A — виза таланта в бизнесе/IT</div><div class="mqo" onclick="mq('wq1',this,'no','Нет. L-1 — для перевода внутри компании.')">L-1 — корпоративный перевод</div><div class="mqo" onclick="mq('wq1',this,'close','Почти! EB-1A — грин-карта таланта. Начинают с O-1A, потом переходят.',true,'wqz',1)">EB-1A — грин-карта таланта</div></div>
+              <div id="wq1fb" class="mqfb"></div>
+            </div>
+            <div class="carousel-slide">
+              <div class="cq-label">Вопрос 2 из 3</div>
+              <div class="cq-q">Сколько ступеней в системе проверки документов SBL?</div>
+              <div id="wq2"><div class="mqo" onclick="mq('wq2',this,'no','Нет. Ступеней 4.')">3 — Паралигал, Адвокат, Клиент</div><div class="mqo" onclick="mq('wq2',this,'ok','Верно! Паралигал → Супервайзер → Стратегия → Адвокат.',true,'wqz',2)">4 — Паралигал, Супервайзер, Стратегия, Адвокат</div><div class="mqo" onclick="mq('wq2',this,'no','Нет. Только 4 ступени.')">2 — Адвокат и Паралигал</div></div>
+              <div id="wq2fb" class="mqfb"></div>
+            </div>
+            <div class="carousel-slide">
+              <div class="cq-label">Вопрос 3 из 3</div>
+              <div class="cq-q">Что такое Мандамус в SBL?</div>
+              <div id="wq3"><div class="mqo" onclick="mq('wq3',this,'no','Нет. Это не тип визы.')">Специальный тип визы</div><div class="mqo" onclick="mq('wq3',this,'ok','Верно! Иск в суд для ускорения USCIS. Более 90% успеха.',true,'wqz',3)">Иск в суд для ускорения USCIS</div><div class="mqo" onclick="mq('wq3',this,'no','Нет. Меморандум — финальный документ адвоката.')">Финальный меморандум адвоката</div></div>
+              <div id="wq3fb" class="mqfb"></div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-nav">
+          <button class="cnavbtn" id="wqz-prev" onclick="cNav('wqz',-1)" disabled>← Назад</button>
+          <div class="cdots" id="wqz-dots"><div class="cdot active" onclick="cGo('wqz',0)"></div><div class="cdot" onclick="cGo('wqz',1)"></div><div class="cdot" onclick="cGo('wqz',2)"></div></div>
+          <button class="cnavbtn" id="wqz-next" onclick="cNav('wqz',1)">Далее →</button>
+        </div>
+        <div class="qr" style="padding-top:12px;border:none"><div class="qch" onclick="markWelcomeQuiz(this,16,'p1bar','p1pct',s1)"></div><div class="qb"><div class="qt" style="font-size:12px">Визовый мини-квиз пройден</div><div class="qs">Ответьте на все 3 вопроса про визы и продукты SBL</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+16%</span></div></div></div>
+      </div>
       <div class="sec">Что происходит сегодня</div>
       <div class="card"><div style="font-size:11px;color:var(--gray);line-height:1.9">
         <div style="display:flex;gap:8px;margin-bottom:8px"><span>💬</span><span>Вы напишете первое приветствие и начнёте встраиваться в командный ритм</span></div>
@@ -751,7 +760,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 </div></div>
 
 <div id="ph6" style="display:none"><div class="page">
-  <div class="hero" style="background:#3C3489">
+  <div class="hero" style="background:var(--teal-d)">
     <div class="h-top"><div><div class="h-lbl">День 6 · Культурный код SBL</div><div class="h-ttl">Традиции, доступы и командный ритм</div><div class="h-sub">Buddy · документы · инструменты · ВК</div></div><div class="hbdg"><div class="hbdg-i">⚙️</div><div class="hbdg-n">Уровень 4</div><div class="hbdg-s">Практик</div></div></div>
     <div class="prow"><span class="pc">Практик</span><span class="pp" id="p6pct">0%</span><span class="pn">→ день 7 — финал</span></div>
     <div class="pw"><div class="pb" id="p6bar" style="width:0%"></div></div>
@@ -772,7 +781,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div>
       <div class="sec">Ключевые шаги дня</div>
       <div class="card">
-        <div style="background:rgba(60,52,137,0.08);border-radius:10px;padding:12px;margin-bottom:12px;border-left:3px solid #534AB7;font-size:12px;color:var(--dark);line-height:1.6">Сегодняшний день про то, как у нас принято работать: где лежат знания, как устроены инструменты и какие привычки помогают удалённой команде быть быстрой, точной и бережной друг к другу.</div>
+        <div style="background:var(--teal-xl);border-radius:10px;padding:12px;margin-bottom:12px;border-left:3px solid var(--red);font-size:12px;color:var(--dark);line-height:1.6">Сегодняшний день про то, как у нас принято работать: где лежат знания, как устроены инструменты и какие привычки помогают удалённой команде быть быстрой, точной и бережной друг к другу.</div>
         <div class="qr"><div class="qch" onclick="chk(this,25,'p6bar','p6pct',s6)"></div><div class="qi" style="background:var(--gold-l)">👥</div><div class="qb"><div class="qt">Познакомился(ась) с Buddy</div><div class="qs">Понял(а), к кому идти с бытовыми и рабочими вопросами в первые недели</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+25%</span></div></div></div>
         <div class="qr"><div class="qch" onclick="chk(this,25,'p6bar','p6pct',s6)"></div><div class="qi" style="background:var(--teal-xl)">🗂️</div><div class="qb"><div class="qt">Знаю, где лежат все документы</div><div class="qs">Папки, регламенты, записи встреч и рабочие материалы теперь вам понятны</div><div class="qm"><span class="tag to">+25%</span></div></div></div>
         <div class="qr"><div class="qch" onclick="chk(this,25,'p6bar','p6pct',s6)"></div><div class="qi" style="background:var(--teal-xl)">🛠️</div><div class="qb"><div class="qt">Убедился(ась), что есть доступ ко всем необходимым инструментам для работы</div><div class="qs">Google Календарь, Google Drive, Clap и корпоративный ИИ подключены и понятны в использовании</div><div class="qm"><span class="tag tr">обязательно</span><span class="tag to">+25%</span></div></div></div>
@@ -842,7 +851,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
         <textarea class="ins-ta" id="finalWishes7" style="background:#fff;color:var(--dark);border:1px solid var(--gray-l);height:96px" placeholder="Что бы вы хотели добавить, упростить или сделать теплее в онбординге?"></textarea>
         <button class="btn btn-t" style="margin-top:0" onclick="submitFinalFeedback(this)">Отправить финальный фидбек</button>
         <div id="finalFeedbackDone7" style="display:none;text-align:center;padding-top:10px;font-size:12px;color:var(--teal)">✓ Финальный фидбек отправлен</div>
-        <div style="background:rgba(201,169,110,.12);border:1.5px solid var(--gold);border-radius:10px;padding:12px;margin-top:12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">⭐</div><div style="font-size:13px;font-weight:600;color:var(--gold-d)">После этого шага вы переходите в Гуру SBL</div><div style="font-size:11px;color:var(--gray);margin-top:4px">И получаете финальный диплом</div></div>
+        <div style="background:var(--gold-l);border:1.5px solid var(--gold);border-radius:10px;padding:12px;margin-top:12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">⭐</div><div style="font-size:13px;font-weight:600;color:var(--gold-d)">После этого шага вы переходите в Гуру SBL</div><div style="font-size:11px;color:var(--gray);margin-top:4px">И получаете финальный диплом</div></div>
       </div>
     </div>
   </div>
@@ -895,6 +904,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
 let ratingVal=0;
 let day1RatingVal=0;
+let welcomePathSent=false;
 let day1ReflectionSent=false;
 let day3CreativeSent=false;
 let day4InsightSent=false;
@@ -928,6 +938,29 @@ function setMetricRating(key,n){
   const label=document.getElementById(`metricLabel-${key}`);
   if(label)label.textContent=ratingLabels[n]||'';
   saveProgress('final_metric_changed');
+}
+function submitWelcomePath(btn){
+  const text=document.getElementById('welcomePathText')?.value?.trim()||'';
+  if(!text){
+    let msg=document.getElementById('gateMsg');
+    if(!msg){
+      msg=document.createElement('div');
+      msg.id='gateMsg';
+      msg.className='gate-msg';
+      document.body.appendChild(msg);
+    }
+    msg.textContent='Сначала опишите путь клиента: как бы вы нашли SBL и почему обратились бы к нам.';
+    msg.classList.add('show');
+    clearTimeout(gateTimer);
+    gateTimer=setTimeout(()=>msg.classList.remove('show'),3200);
+    return;
+  }
+  welcomePathSent=true;
+  btn.style.display='none';
+  const done=document.getElementById('welcomePathDone');
+  if(done)done.style.display='block';
+  sendEvent('insight',{day:0,mood:'Путь клиента',text});
+  afterProgress();
 }
 function submitDayOneReflection(btn){
   const expectations=document.getElementById('day1Expectations')?.value?.trim()||'';
@@ -1261,12 +1294,14 @@ function collectUiState(){
     finalQuizDone:Object.keys(finalQuizDone).filter(key=>finalQuizDone[key]),
     day1RatingVal,
     ratingVal,
+    welcomePathSent,
     day1ReflectionSent,
     day3CreativeSent,
     day4InsightSent,
     finalFeedbackSent,
     finalMetricRatings:{...finalMetricRatings},
     textFields:{
+      welcomePathText:document.getElementById('welcomePathText')?.value||'',
       day1Expectations:document.getElementById('day1Expectations')?.value||'',
       day1Questions:document.getElementById('day1Questions')?.value||'',
       day3CreativeText:document.getElementById('day3CreativeText')?.value||'',
@@ -1332,6 +1367,7 @@ function applyProgressState(state){
   Object.keys(finalQuizDone).forEach(key=>finalQuizDone[key]=(ui.finalQuizDone||[]).includes(key));
   day1RatingVal=ui.day1RatingVal||0;
   ratingVal=ui.ratingVal||state.rating||0;
+  welcomePathSent=!!ui.welcomePathSent;
   day1ReflectionSent=!!ui.day1ReflectionSent;
   day3CreativeSent=!!ui.day3CreativeSent;
   day4InsightSent=!!ui.day4InsightSent;
@@ -1350,6 +1386,7 @@ function applyProgressState(state){
     if(label)label.textContent=ratingLabels[finalMetricRatings[key]||0]||'';
   });
   const tf=ui.textFields||{};
+  if(document.getElementById('welcomePathText'))document.getElementById('welcomePathText').value=tf.welcomePathText||'';
   if(document.getElementById('day1Expectations'))document.getElementById('day1Expectations').value=tf.day1Expectations||'';
   if(document.getElementById('day1Questions'))document.getElementById('day1Questions').value=tf.day1Questions||'';
   if(document.getElementById('day3CreativeText'))document.getElementById('day3CreativeText').value=tf.day3CreativeText||'';
@@ -1361,6 +1398,12 @@ function applyProgressState(state){
   if(finalTrainerField)finalTrainerField.value=tf.finalTrainer||'';
   if(finalVkField)finalVkField.value=tf.finalVk||'';
   if(finalWishesField)finalWishesField.value=tf.finalWishes||'';
+  if(welcomePathSent){
+    const btn=document.querySelector('#ph0 .btn-t');
+    if(btn)btn.style.display='none';
+    const done=document.getElementById('welcomePathDone');
+    if(done)done.style.display='block';
+  }
   if(day1ReflectionSent){
     const btn=document.querySelector('#ph1 .btn-t');
     if(btn)btn.style.display='none';
@@ -1501,7 +1544,7 @@ function allChecksDone(n){
 }
 function allDone(keys){return keys.every(k=>quizDone[k]);}
 function dayComplete(n){
-  if(n===0)return allChecksDone(0)&&allDone(['wq1','wq2','wq3']);
+  if(n===0)return allChecksDone(0);
   if(n===1)return allChecksDone(1);
   if(n===2)return allChecksDone(2)&&allDone(['d2q1','d2q2','d2q3']);
   if(n===3)return allChecksDone(3);
@@ -1520,7 +1563,7 @@ function firstBlockedBefore(target){
 function firstMissing(n){
   const parts=[];
   if(!allChecksDone(n))parts.push('закрыть все задания дня');
-  if(n===0&&!allDone(['wq1','wq2','wq3']))parts.push('пройти мини-квиз Welcome');
+  if(n===1&&!allDone(['wq1','wq2','wq3']))parts.push('пройти визовый мини-квиз');
   if(n===2&&!allDone(['d2q1','d2q2','d2q3']))parts.push('пройти квиз по регламентам');
   if(n===3){
     if(!day3CreativeSent)parts.push('сохранить творческое задание по культуре, ценностям и пути клиента');
@@ -1613,6 +1656,23 @@ function markDayOneReflection(el,add,bId,pId,obj){
   }
   chk(el,add,bId,pId,obj);
 }
+function markWelcomePath(el,add,bId,pId,obj){
+  if(!welcomePathSent){
+    let msg=document.getElementById('gateMsg');
+    if(!msg){
+      msg=document.createElement('div');
+      msg.id='gateMsg';
+      msg.className='gate-msg';
+      document.body.appendChild(msg);
+    }
+    msg.textContent='Сначала сохраните творческое задание про путь клиента.';
+    msg.classList.add('show');
+    clearTimeout(gateTimer);
+    gateTimer=setTimeout(()=>msg.classList.remove('show'),3200);
+    return;
+  }
+  chk(el,add,bId,pId,obj);
+}
 function markDayThreeCreative(el,add,bId,pId,obj){
   if(!day3CreativeSent){
     let msg=document.getElementById('gateMsg');
@@ -1623,6 +1683,23 @@ function markDayThreeCreative(el,add,bId,pId,obj){
       document.body.appendChild(msg);
     }
     msg.textContent='Сначала сохраните творческое задание.';
+    msg.classList.add('show');
+    clearTimeout(gateTimer);
+    gateTimer=setTimeout(()=>msg.classList.remove('show'),3200);
+    return;
+  }
+  chk(el,add,bId,pId,obj);
+}
+function markWelcomeQuiz(el,add,bId,pId,obj){
+  if(!allDone(['wq1','wq2','wq3'])){
+    let msg=document.getElementById('gateMsg');
+    if(!msg){
+      msg=document.createElement('div');
+      msg.id='gateMsg';
+      msg.className='gate-msg';
+      document.body.appendChild(msg);
+    }
+    msg.textContent='Сначала ответьте на все 3 вопроса визового мини-квиза.';
     msg.classList.add('show');
     clearTimeout(gateTimer);
     gateTimer=setTimeout(()=>msg.classList.remove('show'),3200);
@@ -1951,7 +2028,7 @@ function showDayPopup(day,nextDay){
 }
 
 function downloadDiploma(){
-  const html='<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Диплом Гуру SBL</title><style>body{font-family:Arial,sans-serif;background:#f6f8f7;margin:0;padding:40px;color:#111e1a}.d{max-width:760px;margin:0 auto;background:#fff;border:6px double #c9a96e;border-radius:18px;padding:48px;text-align:center}.e{font-size:64px}.t{font-size:34px;font-weight:700;color:#134d41;margin:12px 0}.n{display:inline-block;background:#c9a96e;color:#fff;border-radius:999px;padding:8px 24px;font-size:20px;font-weight:700;margin:12px 0 24px}.m{font-size:18px;line-height:1.7}.s{margin-top:36px;color:#7a5b1a;font-weight:700}</style></head><body><div class="d"><div class="e">🎓</div><div class="t">Диплом</div><div class="n">Гуру SBL</div><div class="m">Настоящим подтверждается: задания закрыты, экзамен пережит достойно, фан-квиз выдержан, обратная связь оставлена.<br><br>Вы получаете почётное звание Гуру SBL и право понимать аббревиатуры без паники.</div><div class="s">Shamayev Business Law · Онбординг завершён</div></div></body></html>';
+  const html='<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Диплом Гуру SBL</title><style>body{font-family:Arial,sans-serif;background:#f4f8f8;margin:0;padding:40px;color:#0b2c31}.d{max-width:760px;margin:0 auto;background:#fff;border:6px double #F0493D;border-radius:18px;padding:48px;text-align:center}.e{font-size:64px}.t{font-size:34px;font-weight:700;color:#005761;margin:12px 0}.n{display:inline-block;background:#005761;color:#fff;border-radius:999px;padding:8px 24px;font-size:20px;font-weight:700;margin:12px 0 24px}.m{font-size:18px;line-height:1.7}.s{margin-top:36px;color:#b33830;font-weight:700}</style></head><body><div class="d"><div class="e">🎓</div><div class="t">Диплом</div><div class="n">Гуру SBL</div><div class="m">Настоящим подтверждается: задания закрыты, экзамен пережит достойно, фан-квиз выдержан, обратная связь оставлена.<br><br>Вы получаете почётное звание Гуру SBL и право понимать аббревиатуры без паники.</div><div class="s">Shamayev Business Law · Онбординг завершён</div></div></body></html>';
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);

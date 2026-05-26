@@ -219,6 +219,7 @@ function sanitizeProgressState(state = {}) {
     finalQuizDone: uniqStrings(rawUi.finalQuizDone),
     day1RatingVal: clampInt(rawUi.day1RatingVal, 0, 5),
     ratingVal: clampInt(rawUi.ratingVal, 0, 5),
+    welcomePathSent: !!rawUi.welcomePathSent,
     day1ReflectionSent: !!rawUi.day1ReflectionSent,
     day3CreativeSent: !!rawUi.day3CreativeSent,
     day4InsightSent: !!rawUi.day4InsightSent,
@@ -230,6 +231,7 @@ function sanitizeProgressState(state = {}) {
       comfort: clampInt(rawUi.finalMetricRatings?.comfort, 0, 5)
     },
     textFields: {
+      welcomePathText: String(rawUi.textFields?.welcomePathText || ''),
       day1Expectations: String(rawUi.textFields?.day1Expectations || ''),
       day1Questions: String(rawUi.textFields?.day1Questions || ''),
       day3CreativeText: String(rawUi.textFields?.day3CreativeText || ''),
